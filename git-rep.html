@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<style>
+    .row {
+        margin: 0;
+        padding: 0;
+        line-height: 1;
+
+    }
+    .container-wrapper {
+        margin-left: 10%;
+        margin-right: 10%;
+        margin-top: 60px;
+        background-color: #EFF3F8;
+    }
+    .uni-item {
+        width: 30%;
+        display: inline-block;
+        text-align: center;
+        /* height: 300px; */
+        background-color: #FFFFFF;
+        margin: 10px;
+    }
+    .img-cls {
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        outline: none;
+    }
+    .uni {
+        margin-top: 20px;
+    }
+    .des {
+        height: 35px;
+        overflow: hidden;
+        color: #A1A1A2;
+        font-size: 10px;
+    }
+    .header-cm {
+        height: 40px;
+        background-color:#4A81FF;
+        color: white;
+    }
+    .header-cm span {
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+    .inp-row {
+        height: 32px;
+        margin-top: 8px;
+    margin-left: 10px;
+    }
+    .cont-cm {
+        margin-left: 10%;
+        margin-right: 10%;
+        border: 1px solid #4A81FF;
+        border-radius: 3px;
+    }
+    .vw-prf {
+        height: 40px;
+        background-color: #4A81FF
+    }
+    .btn_srch {
+        background-color: #4A81FF;
+        color: #D7E5FF;
+        border-radius: 2px;
+        border: none;
+        height: 22px;
+    }
+    .dis-res {
+        background: transparent;
+        text-align: center;
+    }
+    .cmf {
+        border: 1px solid #B1B1B1;
+        color: #B1B1B1;
+        border-radius: 10px;
+        display: inline;
+        margin-left: 10px;
+    }
+    .full-name {
+        height: 20px;
+        overflow: hidden;
+        color: #363636;
+    }
+    .flr {
+        height: 10px;
+    }
+    @media only screen and (max-width: 600px) {
+        .uni-item {
+        width: 95%;
+        display: inline-block;
+        text-align: center;
+        /* height: 300px; */
+        background-color: #FFFFFF;
+        margin: 10px;
+    }
+}
+</style>
+<body>
+    <div class="container-wrapper">
+        <br />
+        <div class="search-ftr cont-cm">
+            <div class="row header-cm">
+                <div class="flr"></div>
+                <span>Git Repo Search Filter</span>
+            </div>
+            <div class="row inp-row">
+                <input class="inp_txt" type="text" placeholder="TEST">
+                <button class="btn_srch" onclick="fetchResult()">Search</button>
+            </div>
+        </div>
+        <div class="result-cls cont-cm" style="margin-top: 15px;">
+            <div class="row header-cm">
+                <div class="flr"></div>
+                <span>Repo search Result</span>
+            </div>
+            <div class="dis-res">
+                
+            </div>
+        </div>
+        <br />
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script>
+    function fetchResult() {
+        $(".dis-res").html("");
+        var inp = $(".inp_txt").val();
+        var query = "https://api.github.com/search/repositories?q=" + inp;
+        console.log(inp);
+        $.ajax({
+            method: "GET",
+            url: query,
+            success: function(data) {
+                console.log(data);
+                var items = data.items;
+                var htmlTot = "";
+                for(let i=0; i<items.length; i++) {
+                    htmlTot = '<div class="uni-item">' +
+                                '<img class="img-cls uni" src="no-img.png" alt="No Image">' +
+                                '<div class="full-name uni">' + items[i].full_name + '</div>' +
+                                '<div class="info uni">' +
+                                    '<div class="star cmf">' + items[i].stargazers_count + '</div>' +
+                                    '<div class="frk-cnt cmf">' + items[i].forks_count + '</div>' +
+                                    '<div class="opn-issues cmf">' + items[i].open_issues_count + '</div>' +
+                                '</div>' +
+                                '<div class="des uni">' + items[i].description + '</div>' +
+                                '<div class="vw-prf uni">' +
+                                '<div class="flr"></div>' +
+                                '<span>View Profile</span>'
+                                '</div>' +
+                            '</div>';
+                $(".dis-res").append(htmlTot);
+                htmlTot = "";
+                }
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+    }
+
+</script>
+</html>
